@@ -1,0 +1,72 @@
+# LibraryProject
+
+A basic Django project developed as part of the "Introduction to Django" curriculum. This project demonstrates the fundamental steps of setting up a Django environment, creating applications, defining models, and utilizing the Django Admin interface.
+
+## Project Structure
+
+This repository contains the following main components:
+* **LibraryProject:** The main project configuration.
+* **bookshelf:** A Django app for managing library books.
+
+## Getting Started
+
+### Prerequisites
+* Python 3.x
+* Django (Install via `pip install django`)
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/YOUR_USERNAME/Alx_DjangoLearnLab.git](https://github.com/YOUR_USERNAME/Alx_DjangoLearnLab.git)
+    cd Alx_DjangoLearnLab/Introduction_to_Django
+    ```
+
+2.  **Navigate to the project directory:**
+    ```bash
+    cd LibraryProject
+    ```
+
+3.  **Run Migrations:**
+    Initialize the database with the defined models.
+    ```bash
+    python manage.py migrate
+    ```
+
+4.  **Create a Superuser (for Admin access):**
+    ```bash
+    python manage.py createsuperuser
+    ```
+
+5.  **Run the Development Server:**
+    ```bash
+    python manage.py runserver
+    ```
+    Access the application at `http://127.0.0.1:8000/`.
+
+## Features
+
+### 1. Bookshelf App
+A dedicated application named `bookshelf` that manages book records.
+
+### 2. Book Model
+The data model (`bookshelf/models.py`) includes the following fields:
+* `title`: CharField (max 200 characters)
+* `author`: CharField (max 100 characters)
+* `publication_year`: IntegerField
+
+### 3. CRUD Operations
+The project demonstrates Create, Read, Update, and Delete operations using the Django ORM shell. Documentation for these commands can be found in the accompanying markdown files:
+* `create.md`
+* `retrieve.md`
+* `update.md`
+* `delete.md`
+
+### 4. Admin Interface
+The Django Admin panel (`http://127.0.0.1:8000/admin/`) is customized for the Book model:
+* **List Display:** Shows Title, Author, and Publication Year columns.
+* **Filters:** Filter books by Author and Publication Year.
+* **Search:** Search capability by Title and Author.
+
+## Author
+Mohamed Dahir Mohamoud
