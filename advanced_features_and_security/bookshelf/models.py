@@ -1,8 +1,6 @@
-# bookshelf/models.py
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+f.emailfrom django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -26,24 +24,8 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-class Book(models.Model):
-    title = models.CharField(max_length=200)
-    author = models.CharField(max_length=100)
-    publication_year = models.IntegerField()
-
-    class Meta:
-        permissions = [
-            ("can_view", "Can view book"),  # Using exact names as specified
-            ("can_create", "Can create book"),
-            ("can_edit", "Can edit book"),
-            ("can_delete", "Can delete book"),
-        ]
-
-    def __str__(self):
-        return self.title
-
 class CustomUser(AbstractUser):
-    username = None  # We are using email as the primary login field
+    username = None
     email = models.EmailField(_("email address"), unique=True)
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to="profile_photos/", null=True, blank=True)
@@ -55,3 +37,5 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+# If you have other models like Book, keep them here

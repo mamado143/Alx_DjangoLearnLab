@@ -21,7 +21,13 @@ SECURE_HSTS_PRELOAD = True  # Allow HSTS preload list
 # Secure Cookies (already in Task 2, but repeated for completeness)
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+# For profile_photo ImageField
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+# ... other settings ...
 
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
+# ... rest of file ...
 # Secure Headers (from Task 2)
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
