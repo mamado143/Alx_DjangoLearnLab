@@ -36,3 +36,15 @@ def book_delete(request, pk):
     book = get_object_or_404(Book, pk=pk)
     book.delete()
     return redirect('book_list')
+
+@def example_form_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # In a real app you might send email or save data here
+            # For demo: just redirect or show success
+            return redirect('book_list')  # or render success page
+    else:
+        form = ExampleForm()
+
+    return render(request, 'bookshelf/form_example.html', {'form': form})
