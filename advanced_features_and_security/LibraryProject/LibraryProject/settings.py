@@ -13,6 +13,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    # ...
+    'bookshelf',
+    # ...
     'django.contrib.staticfiles',
     'bookshelf',
     'users',
@@ -71,8 +74,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 31536000
