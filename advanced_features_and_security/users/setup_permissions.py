@@ -10,7 +10,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 # Point Django to the correct settings module
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'users.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
 
 django.setup()
 
