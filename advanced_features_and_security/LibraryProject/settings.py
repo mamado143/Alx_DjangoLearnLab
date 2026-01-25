@@ -1,34 +1,39 @@
-AUTH_USER_MODEL = 'bookshelf.CustomUser'
+# Add to MIDDLEWARE
+MIDDLEWARE = [
+    # Include our local CSP middleware to avoid third-party deps
+    'security_middleware.CSPMiddleware',
+]
 
-# Also recommended when using custom user + image field
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# If using django-csp instead of local middleware, uncomment and add to INSTALLED_APPS
+# CSP_DEFAULT_SRC = ("'self'",)
+# CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+# CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
+
+# SECURITY SETTINGS
+# Set to True in production
 DEBUG = False
 
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-# HTTPS and Secure Redirects
-SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # For proxies
+# HTTPS Settings
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000  # 1 Year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
-SECURE_HSTS_SECONDS = 31536000  # 1 year HSTS
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Include subdomains
-SECURE_HSTS_PRELOAD = True  # Allow HSTS preload list
-
-# Secure Cookies (already in Task 2, but repeated for completeness)
+# Cookie Security
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-# For profile_photo ImageField
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-# ... other settings ...
 
-AUTH_USER_MODEL = 'bookshelf.CustomUser'
-# ... rest of file ...
-# Secure Headers (from Task 2)
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
+# Browser Security Headers
 X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+
+# Proxy setup (Required if behind Nginx/Apache)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Django app registration and custom user model
+INSTALLED_APPS = [
+    'users',
+    'users.bookshelf',
+]
+AUTH_USER_MODEL = 'users.CustomUser'

@@ -1,26 +1,34 @@
-# Custom User Model
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
-# Media settings for profile_photo
-import os
-from pathlib import Path
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Also recommended when using custom user + image field
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
+DEBUG = False
 
-# Security Best Practices
-DEBUG = False  # Never True in production
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+# HTTPS and Secure Redirects
+SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # For proxies
 
-SECURE_BROWSER_XSS_FILTER = True  # Enables browser XSS protection
-X_FRAME_OPTIONS = 'DENY'  # Prevents clickjacking
-SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevents MIME sniffing
-CSRF_COOKIE_SECURE = True  # CSRF cookie over HTTPS only
-SESSION_COOKIE_SECURE = True  # Session cookie over HTTPS only
+SECURE_HSTS_SECONDS = 31536000  # 1 year HSTS
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Include subdomains
+SECURE_HSTS_PRELOAD = True  # Allow HSTS preload list
 
-# Content Security Policy (CSP) - Install django-csp via pip if needed
-INSTALLED_APPS = [... , 'csp']
-MIDDLEWARE = [... , 'csp.middleware.CSPMiddleware']
-CSP_DEFAULT_SRC = ("'self'",)  # Restrict sources to same origin
-CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")  # Allow inline styles (adjust as needed)
-CSP_SCRIPT_SRC = ("'self'",)
-CSP_IMG_SRC = ("'self'", "data:")
+# Secure Cookies (already in Task 2, but repeated for completeness)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+# For profile_photo ImageField
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+# ... other settings ...
+
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
+# ... rest of file ...
+# Secure Headers (from Task 2)
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
