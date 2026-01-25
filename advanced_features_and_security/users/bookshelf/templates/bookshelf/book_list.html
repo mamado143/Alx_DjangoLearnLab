@@ -1,8 +1,0 @@
-{% comment %} Simple book list template {% endcomment %}
-<ul>
-  {% for book in books %}
-    <li>{{ book.title }} by {{ book.author }} ({{ book.publication_year }})</li>
-  {% empty %}
-    <li>No books found.</li>
-  {% endfor %}
-</ul>
