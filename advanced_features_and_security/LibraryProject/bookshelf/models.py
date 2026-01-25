@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from .forms import ExampleForm
 from django.utils.translation import gettext_lazy as _
 
 class CustomUserManager(BaseUserManager):
@@ -23,6 +24,16 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_("Superuser must have is_superuser=True."))
 
         return self.create_user(email, password, **extra_fields)
+
+def example_form_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            return redirect('book_list')
+    else:
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
+
 
 class CustomUser(AbstractUser):
     username = None
