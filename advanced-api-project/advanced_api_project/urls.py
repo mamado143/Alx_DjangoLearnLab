@@ -9,5 +9,6 @@ urlpatterns = [
     
     # API endpoints directly in project urls (no include needed)
     path('api/books/', BookListCreateView.as_view(), name='book-list'),
+    path('api/', include('api.urls')),  
     path('api/books/<int:pk>/', BookRetrieveUpdateDestroyView.as_view(), name='book-detail'),
 ]
