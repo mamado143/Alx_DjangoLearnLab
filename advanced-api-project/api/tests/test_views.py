@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth.models import User
 from api.models import Author, Book
+from django.urls import reverse
 
 class BookAPITestCase(APITestCase):
     def setUp(self):
@@ -102,3 +103,21 @@ class BookAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0]['publication_year'], 1990)
         self.assertEqual(response.data[1]['publication_year'], 2020)
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.author = Author.objects.create(name="Test Author")
+
+        self.book_new = Book.objects.create(
+            title="New Book",
+            publication_year=2020,
+            author=self.author
+        )
+
+        # Use reverse to dynamically get URLs from names in urls.py
+        self.list_url = reverse('book-list')
+        self.create_url = reverse('book-create')
+        self.detail_url = reverse('book-detail', kwargs={'pk': self.book_new.pk})
+        self.update_url = reverse('book-update', kwargs={'pk': self.book_new.pk})
+        self.delete_url = reverse('book-delete', kwargs={'pk': self.book_new.pk})
