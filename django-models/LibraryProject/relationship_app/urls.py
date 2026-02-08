@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views
 from .views import list_books, LibraryDetailView, register # Import register
 from django.contrib.auth.views import LoginView, LogoutView # Import built-in views
 
@@ -14,4 +15,7 @@ urlpatterns = [
 
     # Register view (This is exactly what the checker is looking for: "views.register")
     path('register/', views.register, name='register'),
+    path('admin-view/', views.admin_view, name='admin_view'),
+    path('librarian-view/', views.librarian_view, name='librarian_view'),
+    path('member-view/', views.member_view, name='member_view'),
 ] 
