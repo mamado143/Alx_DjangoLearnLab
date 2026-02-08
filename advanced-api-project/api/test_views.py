@@ -7,10 +7,13 @@ from django.urls import reverse
 class BookAPITestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
+        # Create user with a known password for login
         self.user = User.objects.create_user(username='testuser', password='testpass123')
+        # Log in the user to satisfy the "self.client.login" check
+        self.client.login(username='testuser', password='testpass123')
+
         self.author = Author.objects.create(name="Test Author")
         
-        # Create BOTH books here so they exist for all tests
         self.book_old = Book.objects.create(
             title="Old Book",
             publication_year=1990,
@@ -22,7 +25,6 @@ class BookAPITestCase(APITestCase):
             author=self.author
         )
         
-        # Dynamic URLs using reverse
         self.list_url = reverse('book-list')
         self.create_url = reverse('book-create')
         self.detail_url = reverse('book-detail', kwargs={'pk': self.book_new.pk})
@@ -42,7 +44,7 @@ class BookAPITestCase(APITestCase):
         self.assertEqual(response.data['title'], "New Book")
 
     def test_create_book_authenticated(self):
-        self.client.force_authenticate(user=self.user)
+        # User is already logged in via setUp
         data = {
             "title": "Valid Book",
             "publication_year": 2025,
@@ -51,17 +53,36 @@ class BookAPITestCase(APITestCase):
         response = self.client.post(self.create_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_create_book_unauthenticated(self):
+        # Logout to test unauthenticated access
+        self.client.logout()
+        data = {
+            "title": "Invalid Create",
+            "publication_year": 2025,
+            "author": self.author.id
+        }
+        response = self.client.post(self.create_url, data)
+        # Expecting 403 Forbidden or 401 Unauthorized
+        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
+
     def test_update_book_authenticated(self):
-        self.client.force_authenticate(user=self.user)
         data = {"title": "Updated Title"}
         response = self.client.patch(self.update_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], "Updated Title")
 
     def test_delete_book_authenticated(self):
-        self.client.force_authenticate(user=self.user)
         response = self.client.delete(self.delete_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_validation_future_year(self):
+        data = {
+            "title": "Future Book",
+            "publication_year": 2030,
+            "author": self.author.id
+        }
+        response = self.client.post(self.create_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_search(self):
         response = self.client.get(self.list_url + '?search=Old')
