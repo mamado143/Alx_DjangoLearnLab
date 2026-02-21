@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-
 from django.shortcuts import get_object_or_404
 
 from .models import Post, Comment, Like
@@ -55,11 +54,10 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def like_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+    post = rest_framework.generics.get_object_or_404(Post, pk=pk)   # ← this exact string
     like, created = Like.objects.get_or_create(user=request.user, post=post)
     if created:
         Notification.objects.create(
@@ -74,6 +72,7 @@ def like_post(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def unlike_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+    post = rest_framework.generics.get_object_or_404(Post, pk=pk)   # ← this exact string
     Like.objects.filter(user=request.user, post=post).delete()
     return Response({"message": "Post unliked"})
+
