@@ -57,7 +57,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def like_post(request, pk):
-    post = rest_framework.generics.get_object_or_404(Post, pk=pk)   # ← this exact string
+    post = get_object_or_404(Post, pk=pk)
     like, created = Like.objects.get_or_create(user=request.user, post=post)
     if created:
         Notification.objects.create(
@@ -72,7 +72,6 @@ def like_post(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def unlike_post(request, pk):
-    post = rest_framework.generics.get_object_or_404(Post, pk=pk)   # ← this exact string
+    post = get_object_or_404(Post, pk=pk)
     Like.objects.filter(user=request.user, post=post).delete()
     return Response({"message": "Post unliked"})
-
