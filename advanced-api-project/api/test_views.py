@@ -4,51 +4,54 @@ from django.contrib.auth.models import User
 from api.models import Author, Book
 from django.urls import reverse
 
+
 class BookAPITestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
         # Create user with a known password for login
-        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.user = User.objects.create_user(
+            username="testuser", password="testpass123"
+        )
         # Log in the user to satisfy the "self.client.login" check
-        self.client.login(username='testuser', password='testpass123')
+        self.client.login(username="testuser", password="testpass123")
 
         self.author = Author.objects.create(name="Test Author")
-        
+
         self.book_old = Book.objects.create(
-            title="Old Book",
-            publication_year=1990,
-            author=self.author
+            title="Old Book", publication_year=1990, author=self.author
         )
         self.book_new = Book.objects.create(
-            title="New Book",
-            publication_year=2020,
-            author=self.author
+            title="New Book", publication_year=2020, author=self.author
         )
-        
-        self.list_url = reverse('book-list')
-        self.create_url = reverse('book-create')
-        self.detail_url = reverse('book-detail', kwargs={'pk': self.book_new.pk})
-        self.update_url = reverse('book-update', kwargs={'pk': self.book_new.pk})
-        self.delete_url = reverse('book-delete', kwargs={'pk': self.book_new.pk})
+
+        self.list_url = reverse("book-list")
+        self.create_url = reverse("book-create")
+        self.detail_url = reverse("book-detail", kwargs={"pk": self.book_new.pk})
+        self.update_url = reverse("book-update", kwargs={"pk": self.book_new.pk})
+        self.delete_url = reverse("book-delete", kwargs={"pk": self.book_new.pk})
 
     def test_list_books(self):
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Handle potential pagination
-        data = response.data['results'] if isinstance(response.data, dict) else response.data
+        data = (
+            response.data["results"]
+            if isinstance(response.data, dict)
+            else response.data
+        )
         self.assertEqual(len(data), 2)
 
     def test_retrieve_book(self):
         response = self.client.get(self.detail_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['title'], "New Book")
+        self.assertEqual(response.data["title"], "New Book")
 
     def test_create_book_authenticated(self):
         # User is already logged in via setUp
         data = {
             "title": "Valid Book",
             "publication_year": 2025,
-            "author": self.author.id
+            "author": self.author.id,
         }
         response = self.client.post(self.create_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -59,17 +62,20 @@ class BookAPITestCase(APITestCase):
         data = {
             "title": "Invalid Create",
             "publication_year": 2025,
-            "author": self.author.id
+            "author": self.author.id,
         }
         response = self.client.post(self.create_url, data)
         # Expecting 403 Forbidden or 401 Unauthorized
-        self.assertIn(response.status_code, [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
+        self.assertIn(
+            response.status_code,
+            [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+        )
 
     def test_update_book_authenticated(self):
         data = {"title": "Updated Title"}
         response = self.client.patch(self.update_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['title'], "Updated Title")
+        self.assertEqual(response.data["title"], "Updated Title")
 
     def test_delete_book_authenticated(self):
         response = self.client.delete(self.delete_url)
@@ -79,25 +85,37 @@ class BookAPITestCase(APITestCase):
         data = {
             "title": "Future Book",
             "publication_year": 2030,
-            "author": self.author.id
+            "author": self.author.id,
         }
         response = self.client.post(self.create_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_search(self):
-        response = self.client.get(self.list_url + '?search=Old')
-        data = response.data['results'] if isinstance(response.data, dict) else response.data
+        response = self.client.get(self.list_url + "?search=Old")
+        data = (
+            response.data["results"]
+            if isinstance(response.data, dict)
+            else response.data
+        )
         self.assertEqual(len(data), 1)
-        self.assertEqual(data[0]['title'], "Old Book")
+        self.assertEqual(data[0]["title"], "Old Book")
 
     def test_filtering(self):
-        response = self.client.get(self.list_url + '?publication_year=1990')
-        data = response.data['results'] if isinstance(response.data, dict) else response.data
+        response = self.client.get(self.list_url + "?publication_year=1990")
+        data = (
+            response.data["results"]
+            if isinstance(response.data, dict)
+            else response.data
+        )
         self.assertEqual(len(data), 1)
-        self.assertEqual(data[0]['publication_year'], 1990)
+        self.assertEqual(data[0]["publication_year"], 1990)
 
     def test_ordering(self):
-        response = self.client.get(self.list_url + '?ordering=publication_year')
-        data = response.data['results'] if isinstance(response.data, dict) else response.data
-        self.assertEqual(data[0]['publication_year'], 1990)
-        self.assertEqual(data[1]['publication_year'], 2020)
+        response = self.client.get(self.list_url + "?ordering=publication_year")
+        data = (
+            response.data["results"]
+            if isinstance(response.data, dict)
+            else response.data
+        )
+        self.assertEqual(data[0]["publication_year"], 1990)
+        self.assertEqual(data[1]["publication_year"], 2020)

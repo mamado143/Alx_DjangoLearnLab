@@ -1,7 +1,7 @@
 # Add to MIDDLEWARE
 MIDDLEWARE = [
     # Include our local CSP middleware to avoid third-party deps
-    'security_middleware.CSPMiddleware',
+    "security_middleware.CSPMiddleware",
 ]
 
 # If using django-csp instead of local middleware, uncomment and add to INSTALLED_APPS
@@ -24,16 +24,16 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Browser Security Headers
-X_FRAME_OPTIONS = 'DENY'
+X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 
 # Proxy setup (Required if behind Nginx/Apache)
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Django app registration and custom user model
 INSTALLED_APPS = [
-    'users',
-    'users.bookshelf',
+    "users",
+    "users.bookshelf",
 ]
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = "users.CustomUser"

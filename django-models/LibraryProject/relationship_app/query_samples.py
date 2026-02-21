@@ -2,7 +2,7 @@ import os
 import django
 
 # Setup Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "LibraryProject.settings") 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "LibraryProject.settings")
 django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
@@ -18,6 +18,7 @@ def get_books_by_author(author_name):
     except Author.DoesNotExist:
         print(f"Author {author_name} not found")
 
+
 # 2. List all books in a library
 def get_books_in_library(library_name):
     try:
@@ -29,6 +30,7 @@ def get_books_in_library(library_name):
     except Library.DoesNotExist:
         print(f"Library {library_name} not found")
 
+
 # 3. Retrieve the librarian for a library
 def get_librarian_for_library(library_name):
     try:
@@ -38,6 +40,7 @@ def get_librarian_for_library(library_name):
         print(librarian.name)
     except (Library.DoesNotExist, Librarian.DoesNotExist):
         print(f"Librarian for {library_name} not found")
+
 
 # Example usage (Optional - for your testing)
 # get_books_by_author("Orwell")

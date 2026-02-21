@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'relationship_app',
+    "relationship_app",
 ]
 
 MIDDLEWARE = [
@@ -123,4 +123,4 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = 'list_books'
+LOGIN_REDIRECT_URL = "list_books"

@@ -19,7 +19,9 @@ def book_create(request):
             return redirect("book_list")
     else:
         form = BookForm()
-    return render(request, "bookshelf/book_form.html", {"form": form, "action": "Create"})
+    return render(
+        request, "bookshelf/book_form.html", {"form": form, "action": "Create"}
+    )
 
 
 @permission_required("bookshelf.can_edit_book", raise_exception=True)

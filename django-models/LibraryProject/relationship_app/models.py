@@ -6,7 +6,7 @@ from django.dispatch import receiver
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, related_name='books')
+    author = models.ForeignKey("Author", on_delete=models.CASCADE, related_name="books")
 
     class Meta:
         permissions = (
@@ -18,6 +18,7 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+
 # Author Model
 class Author(models.Model):
     name = models.CharField(max_length=100)
@@ -25,42 +26,49 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
+
 # Book Model (ForeignKey to Author)
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
 
     def __str__(self):
         return self.title
 
+
 # Library Model (ManyToMany to Book)
 class Library(models.Model):
     name = models.CharField(max_length=100)
-    books = models.ManyToManyField(Book, related_name='libraries')
+    books = models.ManyToManyField(Book, related_name="libraries")
 
     def __str__(self):
         return self.name
+
 
 # Librarian Model (OneToOne to Library)
 class Librarian(models.Model):
     name = models.CharField(max_length=100)
-    library = models.OneToOneField(Library, on_delete=models.CASCADE, related_name='librarian')
+    library = models.OneToOneField(
+        Library, on_delete=models.CASCADE, related_name="librarian"
+    )
 
     def __str__(self):
         return self.name
 
+
 # UserProfile model
 class UserProfile(models.Model):
     ROLE_CHOICES = [
-        ('Admin', 'Admin'),
-        ('Librarian', 'Librarian'),
-        ('Member', 'Member'),
+        ("Admin", "Admin"),
+        ("Librarian", "Librarian"),
+        ("Member", "Member"),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
+
 
 # Signal to automatically create UserProfile when a User is created
 @receiver(post_save, sender=User)
