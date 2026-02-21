@@ -63,7 +63,7 @@ class LoginView(generics.GenericAPIView):
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    permission_classes = []  # we'll add IsAuthenticated later in next tasks
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         # For simplicity now – later secure with permissions
