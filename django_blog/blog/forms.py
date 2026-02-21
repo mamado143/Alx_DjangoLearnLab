@@ -5,6 +5,7 @@ from .models import Post, Comment, Tag
 
 
 class UserRegisterForm(UserCreationForm):
+     password = None
     email = forms.EmailField()
 
     class Meta:
