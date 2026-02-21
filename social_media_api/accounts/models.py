@@ -4,20 +4,21 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     bio = models.TextField(max_length=500, blank=True, null=True)
+
     profile_picture = models.ImageField(
         upload_to='profile_pictures/',
         blank=True,
         null=True,
-        default='profile_pictures/default.jpg'  # optional: add a default image later
+        default='profile_pictures/default.jpg'
     )
-    followers = models.ManyToManyField(
+
+    following = models.ManyToManyField(
         'self',
         symmetrical=False,
-        related_name='following',
+        related_name='followers',
         blank=True
     )
 
-    # Optional: help text or extra methods
     def __str__(self):
         return self.username
 
